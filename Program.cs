@@ -34,4 +34,11 @@ var host = new HostBuilder()
     })
     .Build();
 
+// Ensure database is created (create tables if they don't exist)
+using (var scope = host.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<TodoDb>();
+    db.Database.EnsureCreated();
+}
+
 host.Run();
