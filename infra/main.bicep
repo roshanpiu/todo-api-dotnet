@@ -19,6 +19,7 @@ param sqlAdminPassword string
 
 // Generate unique suffix for globally unique names
 var uniqueSuffix = uniqueString(resourceGroup().id)
+var resourcePrefix = '${appName}-${environment}'
 
 // Deploy Storage Account and Function App
 module functionApp 'modules/function.bicep' = {
@@ -42,6 +43,7 @@ module sqlServer 'modules/sql.bicep' = {
     uniqueSuffix: uniqueSuffix
     adminUsername: sqlAdminUsername
     adminPassword: sqlAdminPassword
+    functionAppPrincipalId: '' // Will be updated after deployment for managed identity
   }
 }
 
