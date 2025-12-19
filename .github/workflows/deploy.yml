@@ -16,6 +16,7 @@ permissions:
 env:
   AZURE_FUNCTIONAPP_NAME: func-todoapi-dev
   AZURE_RESOURCE_GROUP: rg-todoapi-dev
+  AZURE_LOCATION: westus2
   DOTNET_VERSION: '8.0.x'
   WORKING_DIRECTORY: '.'
 
@@ -76,7 +77,7 @@ jobs:
         run: |
           az group create \
             --name ${{ env.AZURE_RESOURCE_GROUP }} \
-            --location eastus \
+            --location ${{ env.AZURE_LOCATION }} \
             --output none || true
       
       - name: Deploy Bicep Template
