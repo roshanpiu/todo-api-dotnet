@@ -19,8 +19,8 @@ param adminUsername string
 @secure()
 param adminPassword string
 
-@description('Function App managed identity principal ID (optional, for future use)')
-param functionAppPrincipalId string = ''
+@description('Use SQL Free tier (only one allowed per subscription)')
+param useFreeTier bool = true
 
 // Resource naming
 var sqlServerName = 'sql-${appName}-${environment}-${take(uniqueSuffix, 6)}'
@@ -49,7 +49,7 @@ resource sqlServerFirewallAzure 'Microsoft.Sql/servers/firewallRules@2023-05-01-
   }
 }
 
-// SQL Database - Serverless with Free tier
+// SQL Database - Serverless (optionally with Free tier)
 // Free tier: 100,000 vCore seconds/month, 32GB storage
 resource sqlDatabase 'Microsoft.Sql/servers/databases@2023-05-01-preview' = {
   parent: sqlServer
@@ -66,8 +66,8 @@ resource sqlDatabase 'Microsoft.Sql/servers/databases@2023-05-01-preview' = {
     maxSizeBytes: 34359738368 // 32 GB
     autoPauseDelay: 60 // Auto-pause after 60 minutes of inactivity
     minCapacity: json('0.5')
-    useFreeLimit: true // Enable free tier
-    freeLimitExhaustionBehavior: 'AutoPause' // Auto-pause when free limit is exhausted
+    useFreeLimit: useFreeTier
+    freeLimitExhaustionBehavior: useFreeTier ? 'AutoPause' : null
   }
 }
 

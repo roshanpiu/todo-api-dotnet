@@ -16,8 +16,8 @@ param uniqueSuffix string
 @secure()
 param sqlConnectionString string
 
-// Resource naming
-var storageAccountName = 'st${replace(appName, '-', '')}${environment}${take(uniqueSuffix, 6)}'
+// Resource naming (storage account names must be 3-24 chars, lowercase alphanumeric only)
+var storageAccountName = 'st${replace(appName, '-', '')}${environment}${take(uniqueSuffix, 8)}'
 var functionAppName = 'func-${appName}-${environment}'
 var appServicePlanName = 'asp-${appName}-${environment}'
 var appInsightsName = 'appi-${appName}-${environment}'
