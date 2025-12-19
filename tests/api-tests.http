@@ -1,0 +1,124 @@
+### Todo API Tests
+### Use with VS Code REST Client extension or similar
+
+@baseUrl = http://localhost:7071
+
+### =====================
+### GET ALL TODOS
+### =====================
+
+### Get all todo items (should be empty initially)
+GET {{baseUrl}}/todoitems
+Content-Type: application/json
+
+###
+
+### =====================
+### CREATE TODOS
+### =====================
+
+### Create first todo item
+POST {{baseUrl}}/todoitems
+Content-Type: application/json
+
+{
+    "name": "Learn Azure Functions",
+    "isComplete": false
+}
+
+###
+
+### Create second todo item
+POST {{baseUrl}}/todoitems
+Content-Type: application/json
+
+{
+    "name": "Deploy to Azure",
+    "isComplete": false
+}
+
+###
+
+### Create third todo item (already complete)
+POST {{baseUrl}}/todoitems
+Content-Type: application/json
+
+{
+    "name": "Setup local development",
+    "isComplete": true
+}
+
+###
+
+### =====================
+### GET TODOS
+### =====================
+
+### Get all todo items
+GET {{baseUrl}}/todoitems
+Content-Type: application/json
+
+###
+
+### Get todo by ID (replace {id} with actual ID)
+GET {{baseUrl}}/todoitems/1
+Content-Type: application/json
+
+###
+
+### Get completed todos only
+GET {{baseUrl}}/todoitems/complete
+Content-Type: application/json
+
+###
+
+### =====================
+### UPDATE TODO
+### =====================
+
+### Update todo item (mark as complete)
+PUT {{baseUrl}}/todoitems/1
+Content-Type: application/json
+
+{
+    "name": "Learn Azure Functions",
+    "isComplete": true
+}
+
+###
+
+### =====================
+### DELETE TODO
+### =====================
+
+### Delete todo item
+DELETE {{baseUrl}}/todoitems/1
+Content-Type: application/json
+
+###
+
+### =====================
+### ERROR CASES
+### =====================
+
+### Get non-existent todo (should return 404)
+GET {{baseUrl}}/todoitems/9999
+Content-Type: application/json
+
+###
+
+### Update non-existent todo (should return 404)
+PUT {{baseUrl}}/todoitems/9999
+Content-Type: application/json
+
+{
+    "name": "Non-existent",
+    "isComplete": false
+}
+
+###
+
+### Delete non-existent todo (should return 404)
+DELETE {{baseUrl}}/todoitems/9999
+Content-Type: application/json
+
