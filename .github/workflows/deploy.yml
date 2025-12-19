@@ -43,7 +43,7 @@ jobs:
         working-directory: ${{ env.WORKING_DIRECTORY }}
       
       - name: Publish
-        run: dotnet publish --configuration Release --output ./publish --no-build
+        run: dotnet publish --configuration Release --output ./publish
         working-directory: ${{ env.WORKING_DIRECTORY }}
       
       - name: Upload artifact
@@ -52,6 +52,7 @@ jobs:
           name: function-app
           path: ${{ env.WORKING_DIRECTORY }}/publish
           if-no-files-found: error
+          include-hidden-files: true
 
   deploy-infrastructure:
     name: Deploy Infrastructure
