@@ -2,6 +2,7 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using TodoApi.Data;
 using TodoApi.Models;
 
@@ -14,6 +15,23 @@ var host = new HostBuilder()
     {
         services.AddApplicationInsightsTelemetryWorkerService();
         services.ConfigureFunctionsApplicationInsights();
+
+        // Add Swagger/OpenAPI services
+        services.AddEndpointsApiExplorer();
+        services.AddSwaggerGen(options =>
+        {
+            options.SwaggerDoc("v1", new OpenApiInfo
+            {
+                Version = "v1",
+                Title = "Todo API",
+                Description = "A simple Todo API built with Azure Functions and .NET",
+                Contact = new OpenApiContact
+                {
+                    Name = "API Support",
+                    Url = new Uri("https://github.com/roshanpiu/todo-api-dotnet")
+                }
+            });
+        });
 
         // Database configuration
         var connectionString = Environment.GetEnvironmentVariable("SqlConnectionString");
@@ -33,5 +51,12 @@ var host = new HostBuilder()
         }
     })
     .Build();
+
+// -- Ensure database is created (create tables if they don't exist)
+using (var scope = host.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<TodoDb>();
+    db.Database.EnsureCreated();
+}
 
 host.Run();

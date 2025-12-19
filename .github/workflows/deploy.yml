@@ -16,6 +16,7 @@ permissions:
 env:
   AZURE_FUNCTIONAPP_NAME: func-todoapi-dev
   AZURE_RESOURCE_GROUP: rg-todoapi-dev
+  AZURE_LOCATION: westus2
   DOTNET_VERSION: '8.0.x'
   WORKING_DIRECTORY: '.'
 
@@ -42,7 +43,7 @@ jobs:
         working-directory: ${{ env.WORKING_DIRECTORY }}
       
       - name: Publish
-        run: dotnet publish --configuration Release --output ./publish --no-build
+        run: dotnet publish --configuration Release --output ./publish
         working-directory: ${{ env.WORKING_DIRECTORY }}
       
       - name: Upload artifact
@@ -51,6 +52,7 @@ jobs:
           name: function-app
           path: ${{ env.WORKING_DIRECTORY }}/publish
           if-no-files-found: error
+          include-hidden-files: true
 
   deploy-infrastructure:
     name: Deploy Infrastructure
@@ -76,7 +78,7 @@ jobs:
         run: |
           az group create \
             --name ${{ env.AZURE_RESOURCE_GROUP }} \
-            --location eastus \
+            --location ${{ env.AZURE_LOCATION }} \
             --output none || true
       
       - name: Deploy Bicep Template
